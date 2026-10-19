@@ -35,7 +35,6 @@ const CHAVE_ESTUDOS = "devtrack-estudos";
 
 let estudos = JSON.parse(localStorage.getItem(CHAVE_ESTUDOS)) ?? [];
 
-
 // Abre form-projeto
 botaoAdicionar.addEventListener("click", function () {
     formularioProjeto.hidden = false;
@@ -71,6 +70,7 @@ function salvarEstudos() {
     localStorage.setItem(CHAVE_ESTUDOS, JSON.stringify(estudos));
 }
 
+// Exclui projeto
 function excluirProjeto(id) {
     const confirmar = confirm("Deseja realmente excluir este projeto?");
 
@@ -101,6 +101,30 @@ formularioProjeto.addEventListener("submit", function (evento) {
 
     salvarProjetos();
     renderizarProjetos();
+});
+
+formularioEstudo.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+
+    const duracao = Number(campoDuracaoEstudo.value);
+
+    if (!Number.isInteger(duracao) || duracao <= 0) {
+        alert("Informe uma duração em minutos maior que zero.");
+        return;
+    }
+
+    const estudo = {
+        id: crypto.randomUUID(),
+        tema: campoTemaEstudo.value.trim(),
+        tecnologia: campoTecnologiaEstudo.value.trim(),
+        duracao: duracao,
+        data: campoDataEstudo.value,
+        descricao: campoDescricaoEstudo.value.trim()
+    };
+
+    estudos.push(estudo);
+    salvarEstudos();
+    renderizarEstudos();
 });
 
 function renderizarProjetos() {
@@ -145,8 +169,50 @@ function renderizarProjetos() {
 
     formularioProjeto.reset();
     formularioProjeto.hidden = true;
-    totalProjetos.textContent = projetos.length;
+    //totalProjetos.textContent = projetos.length;
     mensagemProjetos.hidden = projetos.length > 0;
 }
 
+function renderizarEstudos() {
+  listaEstudos.replaceChildren();
+
+  const estudosOrdenados = [...estudos].sort(function (a, b) {
+    return b.data.localeCompare(a.data);
+  });
+
+  estudosOrdenados.forEach(function (estudo) {
+    const cartao = document.createElement("article");
+    cartao.classList.add("cartao-estudo");
+
+    const titulo = document.createElement("h4");
+    titulo.textContent = estudo.tema;
+
+    const tecnologia = document.createElement("p");
+    tecnologia.textContent = `Tecnologia: ${estudo.tecnologia}`;
+
+    const duracao = document.createElement("p");
+    duracao.textContent = `Duração: ${estudo.duracao} minutos`;
+
+    const data = document.createElement("p");
+    data.textContent = `Data: ${estudo.data}`;
+
+    cartao.append(titulo, tecnologia, duracao, data);
+
+    if (estudo.descricao !== "") {
+      const descricao = document.createElement("p");
+      descricao.textContent = estudo.descricao;
+      cartao.append(descricao);
+    }
+
+    listaEstudos.append(cartao);
+  });
+
+
+  formularioEstudo.reset();
+  formularioEstudo.hidden = true;
+  
+  mensagemEstudos.hidden = estudos.length > 0;
+}
+
 renderizarProjetos();
+renderizarEstudos();
