@@ -143,6 +143,23 @@ function excluirProjeto(id) {
     renderizarProjetos();
 }
 
+// Exclui estudo
+function excluirEstudo(id) {
+  const confirmar = confirm(
+    "Deseja realmente excluir esta atividade de estudo?"
+  );
+
+  if (!confirmar) return;
+
+  estudos = estudos.filter(function (estudo) {
+    return estudo.id !== id;
+  });
+
+  salvarEstudos();
+  renderizarEstudos();
+  atualizarResumoEstudos();
+}
+
 // Cadastra um projeto
 formularioProjeto.addEventListener("submit", function (evento) {
     evento.preventDefault();
@@ -165,8 +182,8 @@ formularioEstudo.addEventListener("submit", function (evento) {
 
     const duracao = Number(campoDuracaoEstudo.value);
 
-    if (!Number.isInteger(duracao) || duracao <= 0) {
-        alert("Informe uma duração em minutos maior que zero.");
+    if (!Number.isInteger(duracao) || duracao <= 0 || duracao > 1000) {
+        alert("Informe uma duração em minutos maior que zero e menor que 1000.");
         return;
     }
 
@@ -181,6 +198,7 @@ formularioEstudo.addEventListener("submit", function (evento) {
 
     estudos.push(estudo);
     salvarEstudos();
+    atualizarResumoEstudos();
     renderizarEstudos();
 });
 
@@ -261,6 +279,20 @@ function renderizarEstudos() {
       cartao.append(descricao);
     }
 
+    const botoes = document.createElement("div");
+
+    const botaoExcluir = document.createElement("button");
+    botaoExcluir.type = "button";
+    botaoExcluir.textContent = "Excluir";
+    botaoExcluir.classList.add("botao-excluir");
+
+    botaoExcluir.addEventListener("click", function () {
+        excluirEstudo(estudo.id);
+    });
+
+    botoes.append(botaoExcluir);
+    cartao.append(botoes);
+
     listaEstudos.append(cartao);
   });
 
@@ -313,7 +345,6 @@ function calcularMinutosEstudadosNaSemana() {
 }
 
 
-
 function atualizarResumoEstudos() {
     const minutosEstudados = calcularMinutosEstudadosNaSemana();
     const horasEstudadas = minutosEstudados / 60;
@@ -346,8 +377,6 @@ function atualizarResumoEstudos() {
     mensagemMeta.textContent =
         `Você completou ${Math.floor(porcentagem)}% da sua meta!`;
 }
-
-campoMetaSemanal.value = String(metaSemanal);
 
 renderizarProjetos();
 renderizarEstudos();
