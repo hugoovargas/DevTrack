@@ -1,199 +1,215 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DevTrack | Meu painel</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" />
     <script src="js/app.js" defer></script>
-</head>
-<body>
+  </head>
+  <body>
     <aside>
-        <h1>DevTrack</h1>
+      <h1>DevTrack</h1>
 
-        <nav aria-label="Menu principal">
-            <a href="#dashboard" class="active">Dashboard</a>
-            <a href="#projetos">Meus projetos</a>
-            <a href="#estudos">Diário de estudos</a>
-            <a href="#metas">Minhas metas</a>
-        </nav>
+      <nav aria-label="Menu principal">
+        <a href="#dashboard" class="active">Dashboard</a>
+        <a href="#projetos">Meus projetos</a>
+        <a href="#estudos">Diário de estudos</a>
+        <a href="#metas">Minhas metas</a>
+      </nav>
     </aside>
 
     <main id="dashboard">
-        <header>
-            <h2>Meu painel</h2>
-            <p>Acompanhe sua evolução como desenvolvedor.</p>
-        </header>
+      <header>
+        <h2>Meu painel</h2>
+        <p>Acompanhe sua evolução como desenvolvedor.</p>
+      </header>
 
-        <section class="stats-grid">
-            <h3 id="resumo-titulo">Resumo da semana</h3>
+      <section class="stats-grid">
+        <h3 id="resumo-titulo">Resumo da semana</h3>
 
-            <article>
-                <h4>Projetos</h4>
-                <p>3</p>
-            </article>
+        <article>
+          <h4>Projetos</h4>
+          <p id="total-projetos">0</p>
+        </article>
 
-            <article>
-                <h4>Horas estudadas</h4>
-                <p>12 horas</p>
-            </article>
+        <article>
+          <h4>Horas estudadas</h4>
+          <p id="horas-estudadas">0h</p>
+        </article>
 
-            <article>
-                <h4>Meta semanal</h4>
-                <p>12 de 15 horas</p>
-            </article>
-        </section>
+        <article>
+          <h4>Meta semanal</h4>
+          <p>
+            <span id="horas-resumo-meta">0</span> de
+            <span id="meta-resumo-semanal">15</span> horas
+          </p>
+        </article>
+      </section>
 
-        
-        <section id="projetos">
-            <h3>Meus projetos</h3>
+      <section id="projetos">
+        <h3>Meus projetos</h3>
 
-            <p id="mensagem-projetos">Seus projetos aparecerão aqui.</p>
+        <p id="mensagem-projetos">Seus projetos aparecerão aqui.</p>
 
-            <div id="lista-projetos"></div>
+        <div id="lista-projetos"></div>
 
-            <button id="btn-adicionar-projeto" type="button">
-                Adicionar projeto
-            </button>
+        <button id="btn-adicionar-projeto" type="button">
+          Adicionar projeto
+        </button>
 
-            <form id="form-projeto" hidden>
-                <h4>Novo projeto</h4>
+        <form id="form-projeto" hidden>
+          <h4>Novo projeto</h4>
 
-                <div>
-                    <label for="nome-projeto">Nome do projeto</label>
-                    <input
-                        type="text"
-                        id="nome-projeto"
-                        name="nome"
-                        placeholder="Ex.: Sistema bancário"
-                        required
-                    >
-                </div>
+          <div>
+            <label for="nome-projeto">Nome do projeto</label>
+            <input
+              type="text"
+              id="nome-projeto"
+              name="nome"
+              placeholder="Ex.: Sistema bancário"
+              required
+            />
+          </div>
 
-                <div>
-                    <label for="tecnologias-projeto">Tecnologias</label>
-                    <input
-                        type="text"
-                        id="tecnologias-projeto"
-                        name="tecnologias"
-                        placeholder="Ex.: Java, Spring Boot, PostgreSQL"
-                        required
-                    >
-                </div>
+          <div>
+            <label for="tecnologias-projeto">Tecnologias</label>
+            <input
+              type="text"
+              id="tecnologias-projeto"
+              name="tecnologias"
+              placeholder="Ex.: Java, Spring Boot, PostgreSQL"
+              required
+            />
+          </div>
 
-                <div>
-                    <label for="descricao-projeto">Descrição</label>
-                    <textarea
-                        id="descricao-projeto"
-                        name="descricao"
-                        placeholder="Descreva seu projeto"
-                        rows="3"
-                    ></textarea>
-                </div>
+          <div>
+            <label for="descricao-projeto">Descrição</label>
+            <textarea
+              id="descricao-projeto"
+              name="descricao"
+              placeholder="Descreva seu projeto"
+              rows="3"
+            ></textarea>
+          </div>
 
-                <button type="submit">Salvar projeto</button>
-                <button id="btn-cancelar-projeto" type="button">Cancelar</button>
-            </form>
-        </section>
+          <button type="submit">Salvar projeto</button>
+          <button id="btn-cancelar-projeto" type="button">Cancelar</button>
+        </form>
+      </section>
 
-        <section id="estudos">
-            <h3>Diário de estudos</h3>
+      <section id="estudos">
+        <h3>Diário de estudos</h3>
 
-            <p id="mensagem-estudos">
-                Você ainda não registrou nenhuma atividade.
-            </p>
+        <p id="mensagem-estudos">Você ainda não registrou nenhuma atividade.</p>
 
-            <div id="lista-estudos"></div>
+        <div id="lista-estudos"></div>
 
-            <button id="btn-adicionar-estudo" type="button">
-                Registrar estudo
-            </button>
+        <button id="btn-adicionar-estudo" type="button">
+          Registrar estudo
+        </button>
 
-            <form id="form-estudo" hidden>
-                <h4>Nova atividade</h4>
+        <form id="form-estudo" hidden>
+          <h4>Nova atividade</h4>
 
-                <div>
-                    <label for="tema-estudo">O que você estudou?</label>
-                    <input
-                        type="text"
-                        id="tema-estudo"
-                        name="tema"
-                        placeholder="Ex.: Injeção de dependência"
-                        required
-                    >
-                </div>
+          <div>
+            <label for="tema-estudo">O que você estudou?</label>
+            <input
+              type="text"
+              id="tema-estudo"
+              name="tema"
+              placeholder="Ex.: Injeção de dependência"
+              required
+            />
+          </div>
 
-                <div>
-                    <label for="tecnologia-estudo">Tecnologia</label>
-                    <input
-                        type="text"
-                        id="tecnologia-estudo"
-                        name="tecnologia"
-                        placeholder="Ex.: Java e Spring Boot"
-                        required
-                    >
-                </div>
+          <div>
+            <label for="tecnologia-estudo">Tecnologia</label>
+            <input
+              type="text"
+              id="tecnologia-estudo"
+              name="tecnologia"
+              placeholder="Ex.: Java e Spring Boot"
+              required
+            />
+          </div>
 
-                <div>
-                    <label for="duracao-estudo">Duração em minutos</label>
-                    <input
-                        type="number"
-                        id="duracao-estudo"
-                        name="duracao"
-                        min="1"
-                        step="1"
-                        placeholder="Ex.: 60"
-                        required
-                    >
-                </div>
+          <div>
+            <label for="duracao-estudo">Duração em minutos</label>
+            <input
+              type="number"
+              id="duracao-estudo"
+              name="duracao"
+              min="1"
+              step="1"
+              placeholder="Ex.: 60"
+              required
+            />
+          </div>
 
-                <div>
-                    <label for="data-estudo">Data do estudo</label>
-                    <input
-                        type="date"
-                        id="data-estudo"
-                        name="data"
-                        required
-                    >
-                </div>
+          <div>
+            <label for="data-estudo">Data do estudo</label>
+            <input type="date" id="data-estudo" name="data" required />
+          </div>
 
-                <div>
-                    <label for="descricao-estudo">Anotações (opcional)</label>
-                    <textarea
-                        id="descricao-estudo"
-                        name="descricao"
-                        placeholder="O que você aprendeu?"
-                        rows="3"
-                    ></textarea>
-                </div>
+          <div>
+            <label for="descricao-estudo">Anotações (opcional)</label>
+            <textarea
+              id="descricao-estudo"
+              name="descricao"
+              placeholder="O que você aprendeu?"
+              rows="3"
+            ></textarea>
+          </div>
 
-                <button type="submit">Salvar estudo</button>
+          <button type="submit">Salvar estudo</button>
 
-                <button id="btn-cancelar-estudo" type="button">
-                    Cancelar
-                </button>
-            </form>
-        </section>
+          <button id="btn-cancelar-estudo" type="button">Cancelar</button>
+        </form>
+      </section>
 
-        
-        <section id="metas">
-            <h3>Minha meta semanal</h3>
+      <section id="metas">
+        <h3>Minha meta semanal</h3>
 
-            <p>12 de 15 horas estudadas</p>
+        <p>
+          <span id="horas-meta">0</span> de
+          <span id="meta-semanal">15</span> horas estudadas
+        </p>
 
-            <div class="progress-bar"
-                role="progressbar"
-                aria-label="Progresso da meta semanal"
-                aria-valuemin="0"
-                aria-valuemax="15"
-                aria-valuenow="12">
-                <div class="progress-fill"></div>
-            </div>
+        <div
+          class="progress-bar"
+          role="progressbar"
+          aria-label="Progresso da meta semanal"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          id="barra-meta"
+        >
+          <div class="progress-fill" id="progresso-meta"></div>
+        </div>
 
-            <p>Você completou 80% da sua meta!</p>
-        </section>
+        <p id="mensagem-meta">Você completou 0% da sua meta!</p>
+
+        <form id="form-meta">
+          <div>
+            <label for="campo-meta-semanal"> Minha meta semanal (horas) </label>
+
+            <input
+              type="number"
+              id="campo-meta-semanal"
+              name="meta"
+              min="1"
+              max="168"
+              step="0.5"
+              value="15"
+              required
+            />
+          </div>
+
+          <button type="submit">Salvar meta</button>
+        </form>
+      </section>
     </main>
-</body>
+  </body>
 </html>
