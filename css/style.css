@@ -14,7 +14,7 @@
 }
 
 body {
-    margin: 10;
+    margin: 0;
     min-height: 100vh;
     font-family: Arial, sans-serif;
     background-color: var(--bg-primary);
@@ -200,7 +200,8 @@ button:active {
 }
 
 /* Cartões dos projetos cadastrados */
-.project-card {
+
+.project-card, .cartao-estudo {
     margin-top: 10px;
     margin-bottom: 16px;
     padding: 20px;
@@ -210,7 +211,7 @@ button:active {
     border-radius: 10px;
 }
 
-.project-card h4 {
+.project-card h4, .cartao-estudo h4 {
     margin-top: 0;
     margin-bottom: 12px;
 
@@ -219,7 +220,7 @@ button:active {
     font-weight: bold;
 }
 
-.project-card p {
+.project-card p, .cartao-estudo p {
     margin-bottom: 8px;
 
     color: var(--color-muted);
@@ -240,3 +241,76 @@ button:active {
 .botao-excluir:hover {
     background-color: #b91c1c;
 }
+
+#form-projeto,
+#form-estudo {
+  margin-top: 20px;
+  padding: 24px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+#form-projeto h4,
+#form-estudo h4 {
+  margin: 0 0 24px;
+  color: var(--color-text);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+#form-projeto > div,
+#form-estudo > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+#form-projeto label,
+#form-estudo label {
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+#form-projeto input,
+#form-projeto textarea,
+#form-estudo input,
+#form-estudo textarea {
+  width: 100%;
+  padding: 12px 14px;
+  color: var(--color-text);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  outline: none;
+  font: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Placeholder */
+
+#form-projeto input::placeholder,
+#form-projeto textarea::placeholder,
+#form-estudo input::placeholder,
+#form-estudo textarea::placeholder {
+  color: var(--color-muted);
+  opacity: 0.7;
+}
+
+#form-projeto button,
+#form-estudo button {
+  min-height: 42px;
+  margin-top: 6px;
+  margin-right: 8px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
