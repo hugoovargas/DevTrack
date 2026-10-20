@@ -10,6 +10,7 @@ const campoDescricao = document.querySelector("#descricao-projeto");
 
 const listaProjetos = document.querySelector("#lista-projetos");
 const mensagemProjetos = document.querySelector("#mensagem-projetos");
+const totalProjetos = document.querySelector("#total-projetos");
 
 const CHAVE_STORAGE = "devtrack-projetos";
 
@@ -35,6 +36,39 @@ const CHAVE_ESTUDOS = "devtrack-estudos";
 
 let estudos = JSON.parse(localStorage.getItem(CHAVE_ESTUDOS)) ?? [];
 
+// META
+
+const CHAVE_META = "devtrack-meta-semanal";
+
+const metaSalva = Number(
+    localStorage.getItem(CHAVE_META)
+);
+
+const elementoHorasEstudadas = document.querySelector("#horas-estudadas");
+const elementoHorasMeta = document.querySelector("#horas-meta");
+const elementoMetaSemanal = document.querySelector("#meta-semanal");
+const barraMeta = document.querySelector("#barra-meta");
+const progressoMeta = document.querySelector("#progresso-meta");
+const mensagemMeta = document.querySelector("#mensagem-meta");
+
+const elementoHorasResumoMeta =
+    document.querySelector("#horas-resumo-meta");
+
+const elementoMetaResumoSemanal =
+    document.querySelector("#meta-resumo-semanal");
+
+
+const formularioMeta = document.querySelector("#form-meta");
+const campoMetaSemanal = document.querySelector("#campo-meta-semanal");
+
+let metaSemanal =
+    Number.isFinite(metaSalva) &&
+    metaSalva >= 1 &&
+    metaSalva <= 168 &&
+    Number.isInteger(metaSalva * 2)
+        ? metaSalva
+        : 15;
+
 // Abre form-projeto
 botaoAdicionar.addEventListener("click", function () {
     formularioProjeto.hidden = false;
@@ -46,6 +80,29 @@ botaoAdicionarEstudo.addEventListener("click", function () {
 
     campoDataEstudo.value = new Date().toLocaleDateString("en-CA");
     campoTemaEstudo.focus();
+});
+
+
+formularioMeta.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+
+    const novaMeta = Number(campoMetaSemanal.value);
+
+    if (
+        !Number.isFinite(novaMeta) ||
+        novaMeta < 1 ||
+        novaMeta > 168 ||
+        novaMeta * 2 !== Math.floor(novaMeta * 2)
+    ) {
+        alert("Informe uma meta entre 1 e 168 horas, em intervalos de meia hora.");
+        return;
+    }
+
+    metaSemanal = novaMeta;
+
+    localStorage.setItem(CHAVE_META, String(metaSemanal));
+
+    atualizarResumoEstudos();
 });
 
 // Cancela form-projeto
@@ -169,7 +226,7 @@ function renderizarProjetos() {
 
     formularioProjeto.reset();
     formularioProjeto.hidden = true;
-    //totalProjetos.textContent = projetos.length;
+    totalProjetos.textContent = projetos.length;
     mensagemProjetos.hidden = projetos.length > 0;
 }
 
@@ -214,5 +271,84 @@ function renderizarEstudos() {
   mensagemEstudos.hidden = estudos.length > 0;
 }
 
+function obterInicioDaSemana(data) {
+  const inicio = new Date(data.getFullYear(), data.getMonth(), data.getDate());
+  const diaDaSemana = inicio.getDay();
+
+  // Domingo (0) volta seis dias; os demais voltam até segunda-feira.
+  const diasDesdeSegunda = (diaDaSemana + 6) % 7;
+
+  inicio.setDate(inicio.getDate() - diasDesdeSegunda);
+
+  return inicio;
+}
+
+function obterFimDaSemana(data) {
+  const fim = obterInicioDaSemana(data);
+
+  fim.setDate(fim.getDate() + 6);
+  fim.setHours(23, 59, 59, 999);
+
+  return fim;
+}
+
+
+function calcularMinutosEstudadosNaSemana() {
+  const hoje = new Date();
+  const inicioSemana = obterInicioDaSemana(hoje);
+  const fimSemana = obterFimDaSemana(hoje);
+
+  let totalMinutos = 0;
+
+  estudos.forEach(function (estudo) {
+    const [ano, mes, dia] = estudo.data.split("-").map(Number);
+    const dataEstudo = new Date(ano, mes - 1, dia);
+
+    if (dataEstudo >= inicioSemana && dataEstudo <= fimSemana) {
+      totalMinutos += estudo.duracao;
+    }
+  });
+
+  return totalMinutos;
+}
+
+
+
+function atualizarResumoEstudos() {
+    const minutosEstudados = calcularMinutosEstudadosNaSemana();
+    const horasEstudadas = minutosEstudados / 60;
+    const metaEmMinutos = metaSemanal * 60;
+
+    const porcentagem = Math.min(
+        (minutosEstudados / metaEmMinutos) * 100,
+        100
+    );
+
+    elementoHorasEstudadas.textContent =
+        `${Number(horasEstudadas.toFixed(2))}h`;
+
+    elementoHorasMeta.textContent =
+        Number(horasEstudadas.toFixed(2));
+
+    elementoMetaSemanal.textContent = metaSemanal;
+    elementoHorasResumoMeta.textContent =
+        Number(horasEstudadas.toFixed(2));
+
+    elementoMetaResumoSemanal.textContent = metaSemanal;
+
+    progressoMeta.style.width = `${porcentagem}%`;
+
+    barraMeta.setAttribute(
+        "aria-valuenow",
+        String(Math.round(porcentagem))
+    );
+
+    mensagemMeta.textContent =
+        `Você completou ${Math.floor(porcentagem)}% da sua meta!`;
+}
+
+campoMetaSemanal.value = String(metaSemanal);
+
 renderizarProjetos();
 renderizarEstudos();
+atualizarResumoEstudos();
